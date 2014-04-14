@@ -1,0 +1,17 @@
+{
+    "name": "realityking/hash_equals",
+    "description": "Provides functionality for hash_equals() to projects using PHP earlier than version 5.6.",
+    "type": "library",
+    "keywords": ["hash", "timing attack"],
+    "homepage": "https://github.com/realityking/hash_equals",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Rouven Weßling",
+            "homepage": "http://rouvenwessling.de"
+        }
+    ],
+    "autoload": {
+        "files": ["src/hash_equals.php"]
+    }
+}
