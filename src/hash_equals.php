@@ -7,41 +7,48 @@
  *
  * @copyright Copyright (c) 2013-2014 Rouven Weßling <http://rouvenwessling.de>
  * @license http://opensource.org/licenses/MIT MIT
+ * @see http://php.net/hash_equals
  */
 
 if (!function_exists('hash_equals')) {
-	function hash_equals($known_string, $user_string)
-	{
+	/**
+	 * Timing attack safe string comparison
+	 *
+	 * @param string $known_string The string of known length to compare against
+	 * @param string $user_string The user-supplied string
+	 *
+	 * @return bool TRUE when the two strings are equal, FALSE otherwise
+	 */
+	function hash_equals($known_string, $user_string) {
 		// We jump trough some hoops to match the internals errors as closely as possible
 		$argc = func_num_args();
-        $params = func_get_args();
-        
-        if ($argc < 2) {
-            trigger_error("hash_equals() expects at least 2 parameters, {$argc} given", E_USER_WARNING);
-            return null;
-        }
-        
-        if (!is_string($known_string)) {
-        	trigger_error("hash_equals(): Expected known_string to be a string, " . gettype($known_string) . " given", E_USER_WARNING);
-            return false;
-        }
 
-        if (!is_string($user_string)) {
-        	trigger_error("hash_equals(): Expected user_string to be a string, " . gettype($user_string) . " given", E_USER_WARNING);
-            return false;
-        }
-        
-        if (strlen($known_string) !== strlen($user_string)) {
-        	return false;
-        }
+		if ($argc < 2) {
+			trigger_error("hash_equals() expects at least 2 parameters, {$argc} given", E_USER_WARNING);
+			return null;
+		}
+
+		if (!is_string($known_string)) {
+			trigger_error("hash_equals(): Expected known_string to be a string, " . gettype($known_string) . " given", E_USER_WARNING);
+			return false;
+		}
+
+		if (!is_string($user_string)) {
+			trigger_error("hash_equals(): Expected user_string to be a string, " . gettype($user_string) . " given", E_USER_WARNING);
+			return false;
+		}
+
+		if (strlen($known_string) !== strlen($user_string)) {
+			return false;
+		}
 
 		$len = strlen($known_string);
 		$result = 0;
-        for ($i = 0; $i < $len; $i++) {
-            $result |= (ord($known_string[$i]) ^ ord($user_string[$i]));
-        }
+		for ($i = 0; $i < $len; $i++) {
+			$result |= (ord($known_string[$i]) ^ ord($user_string[$i]));
+		}
 
-        // They are only identical strings if $result is exactly 0...
-        return 0 === $result;
+		// They are only identical strings if $result is exactly 0...
+		return 0 === $result;
 	}
 }
